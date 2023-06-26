@@ -116,7 +116,7 @@ beta[,] <- if(beta_mode==1) beta_int[i] else
                   ( if(beta_mode==4)  beta_spont_behaviour[i,j] else 0)#
                       #( if(beta_mode==5) beta_cut_peak*rand_beta_factors[i] 
                     #  else 0)#)#))
-
+output(beta) <- TRUE
 ## Core equations for transitions between compartments:
 dim(n_vac_help) <- c(n, n_vac)
 n_vac_help[,1] <- 0#if(vax_type ==1) 0 else (rbinom(vax_time_step[i,1], S[i,1]/sum(S[i,])))
