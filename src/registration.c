@@ -14,13 +14,13 @@ extern void model_deterministic_rhs_dde(void *);
 extern void model_deterministic_rhs_desolve(void *);
 
 /* .Call calls */
-extern SEXP model_deterministic_contents(SEXP);
-extern SEXP model_deterministic_create(SEXP);
-extern SEXP model_deterministic_initial_conditions(SEXP, SEXP);
-extern SEXP model_deterministic_metadata(SEXP);
-extern SEXP model_deterministic_rhs_r(SEXP, SEXP, SEXP);
-extern SEXP model_deterministic_set_initial(SEXP, SEXP, SEXP, SEXP);
-extern SEXP model_deterministic_set_user(SEXP, SEXP);
+extern SEXP model_deterministic_contents(void *);
+extern SEXP model_deterministic_create(void *);
+extern SEXP model_deterministic_initial_conditions(void *, void *);
+extern SEXP model_deterministic_metadata(void *);
+extern SEXP model_deterministic_rhs_r(void *, void *, void *);
+extern SEXP model_deterministic_set_initial(void *, void *, void *, void *);
+extern SEXP model_deterministic_set_user(void *, void *);
 
 static const R_CMethodDef CEntries[] = {
     {"model_deterministic_initmod_desolve", (DL_FUNC) &model_deterministic_initmod_desolve, 1},
