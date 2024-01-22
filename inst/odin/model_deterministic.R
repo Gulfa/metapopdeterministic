@@ -79,7 +79,7 @@ contact_change[,] <- if(kernel[i,j] > 15) 1 else (exp(kernel[i,j])/(1 + exp(kern
 output(contact_change) <- TRUE
 #deriv(contact_change[,]) <- logit(spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,])^spont_behav_change_params[2])) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3]))
 dim(beta_reduction) <- c(n, n_vac)
-beta_int[] <- interpolate(interpolation_time, beta_day)
+beta_int[] <- interpolate(interpolation_time, beta_day, "constant")
 dim(beta_int) <- n
 beta_reduction[,] <- 1 - beta_int[i] /spont_behav_change_params[1] 
 
