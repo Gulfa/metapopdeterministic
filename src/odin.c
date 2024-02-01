@@ -1039,6 +1039,7 @@ SEXP model_deterministic_create(SEXP user) {
   internal->icu_prob = NULL;
   internal->import_vec = NULL;
   internal->infectious_period = NA_REAL;
+  internal->interpolation_time = NULL;
   internal->latent_period = NA_REAL;
   internal->length_hosp = NULL;
   internal->length_icu = NULL;
@@ -3082,8 +3083,6 @@ SEXP model_deterministic_set_user(SEXP internal_p, SEXP user) {
   internal->beta_int = (double*) R_Calloc(internal->dim_beta_int, double);
   R_Free(internal->index);
   internal->index = (double*) R_Calloc(internal->dim_index, double);
-  R_Free(internal->interpolation_time);
-  internal->interpolation_time = (double*) R_Calloc(internal->dim_interpolation_time, double);
   internal->beta_norm = (double*) user_get_array(user, false, internal->beta_norm, "beta_norm", NA_REAL, NA_REAL, 1, internal->dim_beta_norm);
   internal->beta_strain = (double*) user_get_array(user, false, internal->beta_strain, "beta_strain", NA_REAL, NA_REAL, 1, internal->dim_beta_strain);
   internal->dim_A = internal->dim_A_1 * internal->dim_A_2 * internal->dim_A_3;
@@ -3277,6 +3276,7 @@ SEXP model_deterministic_set_user(SEXP internal_p, SEXP user) {
   internal->dim_waning_immunity_vax = internal->dim_waning_immunity_vax_1 * internal->dim_waning_immunity_vax_2 * internal->dim_waning_immunity_vax_3;
   internal->dim_waning_immunity_vax_12 = internal->dim_waning_immunity_vax_1 * internal->dim_waning_immunity_vax_2;
   internal->dim_waning_tmp = internal->dim_waning_tmp_1 * internal->dim_waning_tmp_2;
+  internal->interpolation_time = (double*) user_get_array(user, false, internal->interpolation_time, "interpolation_time", NA_REAL, NA_REAL, 1, internal->dim_interpolation_time);
   internal->A_ini = (double*) user_get_array(user, false, internal->A_ini, "A_ini", NA_REAL, NA_REAL, 3, internal->dim_A_ini_1, internal->dim_A_ini_2, internal->dim_A_ini_3);
   internal->B_D_H_ini = (double*) user_get_array(user, false, internal->B_D_H_ini, "B_D_H_ini", NA_REAL, NA_REAL, 3, internal->dim_B_D_H_ini_1, internal->dim_B_D_H_ini_2, internal->dim_B_D_H_ini_3);
   internal->B_D_ICU_ini = (double*) user_get_array(user, false, internal->B_D_ICU_ini, "B_D_ICU_ini", NA_REAL, NA_REAL, 3, internal->dim_B_D_ICU_ini_1, internal->dim_B_D_ICU_ini_2, internal->dim_B_D_ICU_ini_3);
@@ -3425,9 +3425,6 @@ SEXP model_deterministic_set_user(SEXP internal_p, SEXP user) {
   internal->import_vec = (double*) user_get_array(user, false, internal->import_vec, "import_vec", NA_REAL, NA_REAL, 4, internal->dim_import_vec_1, internal->dim_import_vec_2, internal->dim_import_vec_3, internal->dim_import_vec_4);
   for (int i = 1; i <= internal->dim_index; ++i) {
     internal->index[i - 1] = (int) ((i - 1) / (double) internal->vac_struct_length) + 1;
-  }
-  for (int i = 1; i <= internal->dim_interpolation_time; ++i) {
-    internal->interpolation_time[i - 1] = i;
   }
   internal->length_hosp = (double*) user_get_array(user, false, internal->length_hosp, "length_hosp", NA_REAL, NA_REAL, 3, internal->dim_length_hosp_1, internal->dim_length_hosp_2, internal->dim_length_hosp_3);
   internal->length_icu = (double*) user_get_array(user, false, internal->length_icu, "length_icu", NA_REAL, NA_REAL, 3, internal->dim_length_icu_1, internal->dim_length_icu_2, internal->dim_length_icu_3);

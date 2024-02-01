@@ -1,5 +1,5 @@
 
-interpolation_time[] <- i
+interpolation_time[] <- user()
 dim(interpolation_time) <- N_steps
 #dt <- user(1)
 #initial(time) <- 1s
