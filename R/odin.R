@@ -35,11 +35,11 @@ model_deterministic_ <- R6::R6Class(
              "ICU_H_ini", "ICU_P_ini", "ICU_R_ini", "I_imp_ini", "P_ini",
              "R_ini", "beta_norm", "expected_health_loss",
              "incidence_steps_measurement", "include_waning", "n",
-             "rand_beta_days", "spont_behav_change_params", "threshold_ini",
-             "threshold_max", "threshold_min", "tot_hosp_ini",
-             "tot_infected_ini", "tot_resp_ini", "tot_vac_adm_ini",
-             "tot_vac_ini", "vac_struct_length", "vax_type",
-             "waning_immunity"),
+             "rand_beta_days", "spont_behav_change_params",
+             "spont_behav_mode", "threshold_ini", "threshold_max",
+             "threshold_min", "tot_hosp_ini", "tot_infected_ini",
+             "tot_resp_ini", "tot_vac_adm_ini", "tot_vac_ini",
+             "vac_struct_length", "vax_type", "waning_immunity"),
 
     ## This is never called, but is used to ensure that R finds our
     ## symbols that we will use from the package; without this they

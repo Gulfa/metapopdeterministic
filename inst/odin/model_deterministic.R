@@ -60,7 +60,8 @@ beta_day[,] <- user()
 ## Spontaneous behaviour change
 ## Here beta_day is treated as the "government policy" and the total effect is a combination 
 
-dim(spont_behav_change_params) <- 6 # beta_0 beta without any interventions or regulation, T - time horizon, v - cost of isolation, a the speed of transition in logit function, parameter 1 for combing self reg and gov, param 2 for combining self reg and gov
+spont_behav_mode <- user(1)
+dim(spont_behav_change_params) <- 7 # beta_0 beta without any interventions or regulation, T - time horizon, v - cost of isolation, a the speed of transition in logit function, parameter 1 for combing self reg and gov, param 2 for combining self reg and gov and maybe max cost for mode=2
 spont_behav_change_params[] <- user(0)
 dim(expected_health_loss) <- c(n, n_vac)
 expected_health_loss[,] <- user(0)
@@ -72,10 +73,15 @@ dim(contact_change) <- c(n, n_vac)
 p_SE[,,] <- if(S[i,j] > 0 ) (n_EaA[i,j,k] + n_EsI[i,j,k])/S[i,j] else 0 #1 - exp(-sum(lambda_ij[i,j,,,])*symp_asymp_effect[i,j,k])
 dim(p_SE) <- c(n, n_vac, n_strain)
 
-kernel[,] <- spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,]))^spont_behav_change_params[2]) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3])
+
+a <- spont_behav_change_params[4]
+C[,] <- (1-(1- sum(p_SE[i,j,]))^spont_behav_change_params[2]) * expected_health_loss[i,j]
+dim(C)  <- c(n, n_vac)
+W <- spont_behav_change_params[2] *spont_behav_change_params[3]
+kernel[,] <- a*(C[i,j]-W)#spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,]))^spont_behav_change_params[2]) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3])
 dim(kernel) <- c(n, n_vac)
 
-contact_change[,] <- if(kernel[i,j] > 15) 1 else (exp(kernel[i,j])/(1 + exp(kernel[i,j])))
+contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*W))/a + log(exp(a*C[i,j])+1))/spont_behav_change_params[7])
 output(contact_change) <- TRUE
 #deriv(contact_change[,]) <- logit(spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,])^spont_behav_change_params[2])) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3]))
 dim(beta_reduction) <- c(n, n_vac)
@@ -148,7 +154,7 @@ waning_tmp[,] <- if(vac_struct_length == 0) sum(n_RS[i,j,]) else (
 dim(waning_tmp) <- c(n, n_vac)
 
 #deriv(S[,]) <-  S[i,j] - sum(n_SE[i,j,]) +  n_vac_now[i,j] - n_waning[i,j] + waning_tmp[i,j] -sum(N_imp_non_zero[i,j,])  #+ (sum(mig_S[i,])- S[i]/reg_pop_long[i] * sum(migration_matrix[1:n,i]))*dt + dt*S_waning[i]/waning_immunity_vax[i]*0   - n_imp[i] 
-deriv(S[,]) <-  - sum(n_SE[i,j,]) +  n_vac_now[i,j] - -sum(N_imp_non_zero[i,j,]) + sum(n_RS[i,j,])  #+ (sum(mig_S[i,])- S[i]/reg_pop_long[i] * sum(migration_matrix[1:n,i]))*dt + dt*S_waning[i]/waning_immunity_vax[i]*0   - n_imp[i] 
+deriv(S[,]) <-  - sum(n_SE[i,j,]) +  n_vac_now[i,j] - sum(N_imp_non_zero[i,j,]) + sum(n_RS[i,j,])  #+ (sum(mig_S[i,])- S[i]/reg_pop_long[i] * sum(migration_matrix[1:n,i]))*dt + dt*S_waning[i]/waning_immunity_vax[i]*0   - n_imp[i] 
 #S[] <- if(S[i] <0 ) 0 S[i]
 
 deriv(Ea[,,]) <-  n_SEa[i,j,k] - n_EaA[i,j,k] #+ n_RIA[i,j,k]# +  dt*(sum(mig_Ea[i,])- Ea[i]/reg_pop_long[i] * sum(migration_matrix[1:n,i]))
