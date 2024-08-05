@@ -4180,7 +4180,7 @@ void model_deterministic_rhs(model_deterministic_internal* internal, double t, d
   }
   for (int i = 1; i <= internal->dim_contact_change_1; ++i) {
     for (int j = 1; j <= internal->dim_contact_change_2; ++j) {
-      internal->contact_change[i - 1 + internal->dim_contact_change_1 * (j - 1)] = (internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1] > 15 ? 1 : ((internal->spont_behav_mode == 1 ? exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1]) / (double) (1 + exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1])) : (internal->spont_behav_change_params[6] - log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + exp(internal->a * internal->W)) / (double) internal->a + log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + 1) / (double) internal->a) / (double) internal->spont_behav_change_params[6])));
+      internal->contact_change[i - 1 + internal->dim_contact_change_1 * (j - 1)] = (internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1] > 15 ? 1 : ((internal->spont_behav_mode == 1 ? exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1]) / (double) (1 + exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1])) : (internal->spont_behav_change_params[6] - log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + exp(internal->a * internal->spont_behav_change_params[6])) / (double) internal->a + log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + 1) / (double) internal->a) / (double) internal->spont_behav_change_params[6])));
     }
   }
   for (int i = 1; i <= internal->dim_beta_spont_behaviour_1; ++i) {
@@ -4359,7 +4359,7 @@ void model_deterministic_output_dde(size_t n_eq, double t, double * state, size_
   }
   for (int i = 1; i <= internal->dim_contact_change_1; ++i) {
     for (int j = 1; j <= internal->dim_contact_change_2; ++j) {
-      internal->contact_change[i - 1 + internal->dim_contact_change_1 * (j - 1)] = (internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1] > 15 ? 1 : ((internal->spont_behav_mode == 1 ? exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1]) / (double) (1 + exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1])) : (internal->spont_behav_change_params[6] - log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + exp(internal->a * internal->W)) / (double) internal->a + log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + 1) / (double) internal->a) / (double) internal->spont_behav_change_params[6])));
+      internal->contact_change[i - 1 + internal->dim_contact_change_1 * (j - 1)] = (internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1] > 15 ? 1 : ((internal->spont_behav_mode == 1 ? exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1]) / (double) (1 + exp(internal->kernel[internal->dim_kernel_1 * (j - 1) + i - 1])) : (internal->spont_behav_change_params[6] - log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + exp(internal->a * internal->spont_behav_change_params[6])) / (double) internal->a + log(exp(internal->a * internal->C[internal->dim_C_1 * (j - 1) + i - 1]) + 1) / (double) internal->a) / (double) internal->spont_behav_change_params[6])));
     }
   }
   for (int i = 1; i <= internal->dim_beta_spont_behaviour_1; ++i) {
