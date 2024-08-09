@@ -81,7 +81,7 @@ W <- spont_behav_change_params[2] *spont_behav_change_params[3]
 kernel[,] <- a*(C[i,j]-W)#spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,]))^spont_behav_change_params[2]) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3])
 dim(kernel) <- c(n, n_vac)
 
-contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*spont_behav_change_params[7]))/a + log(exp(a*C[i,j])+1)/a)/spont_behav_change_params[7])
+contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(expected_health_loss[i,j]<0) 0 else( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*spont_behav_change_params[7]))/a + log(exp(a*C[i,j])+1)/a)/spont_behav_change_params[7]))
                                                                                                                                                 
 output(contact_change) <- TRUE
 #deriv(contact_change[,]) <- logit(spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,])^spont_behav_change_params[2])) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3]))
