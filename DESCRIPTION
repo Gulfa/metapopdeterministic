@@ -6,7 +6,7 @@ Authors@R:
            family = "Roe",
            role = c("aut", "cre"),
            email = "gunnarroe@gmail.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "YOUR-ORCID-ID"))    
 Description: Deterministic version of the metapopulation model in the metapop package
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license

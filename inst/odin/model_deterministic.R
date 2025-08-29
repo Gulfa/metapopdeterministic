@@ -61,12 +61,15 @@ beta_day[,] <- user()
 ## Here beta_day is treated as the "government policy" and the total effect is a combination 
 
 spont_behav_mode <- user(1)
-dim(spont_behav_change_params) <- 7 # beta_0 beta without any interventions or regulation, T - time horizon, v - cost of isolation, a the speed of transition in logit function, parameter 1 for combing self reg and gov, param 2 for combining self reg and gov and maybe max cost for mode=2
+dim(spont_behav_change_params) <- 8 # beta_0 beta without any interventions or regulation, T - time horizon, v - cost of isolation, a the speed of transition in logit function, parameter 1 for combing self reg and gov, param 2 for combining self reg and gov and maybe max cost for mode=2
 spont_behav_change_params[] <- user(0)
 dim(expected_health_loss) <- c(n, n_vac)
 expected_health_loss[,] <- user(0)
-
-# [0,1]
+initial(scale_spont[,]) <-1
+new_infs[,,] <- n_EaA[i,j,k] + n_EsI[i,j,k]
+dim(new_infs) <- c(n, n_vac, n_strain)
+deriv(scale_spont[,]) <- if(sum(new_infs[i,j,]) > 1 && S[i,j] < 1/2*sum(R[i,j,])) 0 else -spont_behav_change_params[8]*scale_spont[i,j]
+dim(scale_spont) <- c(n, n_vac)
 dim(contact_change) <- c(n, n_vac)
 
 
@@ -81,7 +84,8 @@ W <- spont_behav_change_params[2] *spont_behav_change_params[3]
 kernel[,] <- a*(C[i,j]-W)#spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,]))^spont_behav_change_params[2]) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3])
 dim(kernel) <- c(n, n_vac)
 
-contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(expected_health_loss[i,j]<0) 0 else( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*spont_behav_change_params[7]))/a + log(exp(a*C[i,j])+1)/a)/spont_behav_change_params[7]))
+contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(expected_health_loss[i,j]<0) 0 else( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (scale_spont[i,j]*(spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*spont_behav_change_params[7]))/a + log(exp(a*C[i,j])+1)/a)/spont_behav_change_params[7])))
+#contact_change[,] <- if(kernel[i,j] > 15) 1 else ( if(spont_behav_mode==1) exp(kernel[i,j])/(1 + exp(kernel[i,j])) else (spont_behav_change_params[7] - log(exp(a*C[i,j]) + exp(a*spont_behav_change_params[7]))/a + log(exp(a*C[i,j])+1)/a)/spont_behav_change_params[7])
                                                                                                                                                 
 output(contact_change) <- TRUE
 #deriv(contact_change[,]) <- logit(spont_behav_change_params[4]*( (1-(1- sum(p_SE[i,j,])^spont_behav_change_params[2])) * expected_health_loss[i,j] - spont_behav_change_params[2] *spont_behav_change_params[3]))
