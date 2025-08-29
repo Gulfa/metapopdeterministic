@@ -4216,7 +4216,7 @@ void model_deterministic_rhs(model_deterministic_internal* internal, double t, d
   }
   for (int i = 1; i <= internal->dim_scale_spont_1; ++i) {
     for (int j = 1; j <= internal->dim_scale_spont_2; ++j) {
-      dstatedt[1 + i - 1 + internal->dim_scale_spont_1 * (j - 1)] = ((odin_sum3(internal->new_infs, i - 1, i, j - 1, j, 0, internal->dim_new_infs_3, internal->dim_new_infs_1, internal->dim_new_infs_12) < 1) && (S[internal->dim_S_1 * (j - 1) + i - 1] < 1 / (double) 2 * odin_sum3(R, i - 1, i, j - 1, j, 0, internal->dim_R_3, internal->dim_R_1, internal->dim_R_12)) ? -(internal->spont_behav_change_params[7]) * scale_spont[internal->dim_scale_spont_1 * (j - 1) + i - 1] : 0);
+      dstatedt[1 + i - 1 + internal->dim_scale_spont_1 * (j - 1)] = ((odin_sum3(internal->new_infs, i - 1, i, j - 1, j, 0, internal->dim_new_infs_3, internal->dim_new_infs_1, internal->dim_new_infs_12) < 1) && (S[internal->dim_S_1 * (j - 1) + i - 1] / (double) internal->N[internal->dim_N_1 * (j - 1) + i - 1] < 0.90000000000000002) ? -(internal->spont_behav_change_params[7]) * scale_spont[internal->dim_scale_spont_1 * (j - 1) + i - 1] : 0);
     }
   }
   for (int i = 1; i <= internal->dim_tot_hosp_1; ++i) {
