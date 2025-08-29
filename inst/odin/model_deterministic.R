@@ -68,7 +68,7 @@ expected_health_loss[,] <- user(0)
 initial(scale_spont[,]) <-1
 new_infs[,,] <- n_EaA[i,j,k] + n_EsI[i,j,k]
 dim(new_infs) <- c(n, n_vac, n_strain)
-deriv(scale_spont[,]) <- if(sum(new_infs[i,j,]) > 1 && S[i,j] < 1/2*sum(R[i,j,])) 0 else -spont_behav_change_params[8]*scale_spont[i,j]
+deriv(scale_spont[,]) <- if((sum(new_infs[i,j,]) < 1) && (S[i,j] < 1/2*sum(R[i,j,]))) -spont_behav_change_params[8]*scale_spont[i,j] else 0 
 dim(scale_spont) <- c(n, n_vac)
 dim(contact_change) <- c(n, n_vac)
 
